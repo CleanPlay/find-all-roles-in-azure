@@ -37,7 +37,8 @@ class GitHubIssueCreator:
         return created, updated, closed
 
     def _find_existing_issue(self, finding: RoleFinding) -> int | None:
-        search_query = f'repo:{self.repo.full_name} is:open "{finding.principal_name}" "{finding.role_name}"'
+        principal_search = finding.principal_name or finding.principal_id[:8]
+        search_query = f'repo:{self.repo.full_name} is:open "{principal_search}" "{finding.role_name}"'
 
         try:
             issues = self.gh.search_issues(search_query)
@@ -50,14 +51,16 @@ class GitHubIssueCreator:
         return None
 
     def _is_matching_finding(self, issue, finding: RoleFinding) -> bool:
+        principal_name = finding.principal_name or finding.principal_id
         return (
-            finding.principal_name in issue.title
+            principal_name in issue.title
             and finding.role_name in issue.title
             and finding.subscription_name in issue.body
         )
 
     def _create_issue(self, finding: RoleFinding):
-        title = f"[{finding.risk_level}] {finding.principal_name} has {finding.role_name} on {finding.scope_type}"
+        principal_name = finding.principal_name or finding.principal_id[:8]
+        title = f"[{finding.risk_level}] {principal_name} has {finding.role_name} on {finding.scope_type}"
         body = self._generate_issue_body(finding)
         labels = [finding.risk_level.lower(), "azure-rbac", "security"]
 
@@ -81,6 +84,7 @@ class GitHubIssueCreator:
             self.logger.error(f"Failed to update issue #{issue_number}: {e}")
 
     def _generate_issue_body(self, finding: RoleFinding) -> str:
+        principal_name = finding.principal_name or f"Principal {finding.principal_id[:8]}"
         scope_level = "subscription" if "/subscriptions/" in finding.scope and finding.scope.count("/") == 3 else "resource group" if "/resourceGroups/" in finding.scope else "tenant"
 
         fix_options = f"""
@@ -116,7 +120,7 @@ az role assignment create \\
 ```
 """
 
-        return f"""## Security Finding: {finding.principal_name} has {finding.role_name} on {finding.scope_type}
+        return f"""## Security Finding: {principal_name} has {finding.role_name} on {finding.scope_type}
 
 **Risk Level:** 🔴 {finding.risk_level.value}
 
