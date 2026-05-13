@@ -1,0 +1,57 @@
+# Environment & Credentials
+.env
+.env.local
+.env.*.local
+*.pem
+*.key
+*.pfx
+credentials.json
+secrets.json
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+dist/
+build/
+.venv/
+venv/
+*.egg
+
+# Node
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# Terraform
+*.tfstate
+*.tfstate.*
+.terraform/
+.terraform.lock.hcl
+override.tf.json
+
+# Azure
+.azure/
+azure_credentials.json
+
+# Local output files
+*.log
+output/
+reports/
+results/
+
+# OS
+.DS_Store
+.AppleDouble
+.LSOverride
+Thumbs.db
