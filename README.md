@@ -97,13 +97,12 @@ This project continuously audits Azure RBAC to find users and service accounts w
 
 ## Status
 
-- [x] Project structure & plan
 - [x] Phase 1: Service principal setup
 - [x] Phase 2: Python audit implementation (20 findings identified)
 - [x] Phase 3: GitHub integration (20 issues created: 5 CRITICAL, 15 HIGH)
 - [x] Phase 4: Audit & issue creation working end-to-end
-- [ ] Phase 5: Scheduled audits (GitHub Actions)
-- [ ] Phase 6: Documentation & user guide
+- [x] Phase 6: Complete documentation (remediation, architecture, findings summary)
+- [ ] Phase 5: Scheduled audits (GitHub Actions) — Optional, after remediation
 
 ## Running Audits
 
@@ -115,6 +114,59 @@ python scripts/run_audit.py --create-issues
 
 ### Scheduled (GitHub Actions)
 See [.github/workflows/audit_schedule.yml](.github/workflows/audit_schedule.yml) for weekly automated audits.
+
+---
+
+## Remediating Findings
+
+### Start a Claude Session per Issue
+
+1. **Go to GitHub issue** (e.g., #6, #12, #19, #23)
+2. **Click "Claude Code" button** (top right of issue)
+3. **Claude will:**
+   - Read the issue description
+   - Help you understand the finding
+   - Walk you through remediation steps
+   - Verify the fix works
+
+### Remediation Guide
+
+See **[docs/REMEDIATION.md](docs/REMEDIATION.md)** for:
+- Complete guide to fixing CRITICAL and HIGH findings
+- Remediation options with Azure CLI commands
+- Testing procedures and rollback steps
+- Common patterns and mistakes
+
+### Find Summary
+
+See **[docs/FINDINGS_SUMMARY.md](docs/FINDINGS_SUMMARY.md)** for:
+- Complete list of all 20 findings
+- Organized by risk level
+- Remediation priority
+- GitHub issue links
+
+### Priority Order
+
+1. **CRITICAL (5 issues):** Service principals with Owner role
+   - GitHub issues: [#2](#), [#12](#), [#19](#), [#20](#), [#23](#)
+   - **Fix first** — Highest risk
+   - Replace Owner with Contributor or resource-specific role
+
+2. **HIGH (15 issues):** Service principals with Contributor role
+   - Subscription-level (production subscriptions first)
+   - Then resource-group/resource-level (dev subscriptions)
+   - Scope down or remove as appropriate
+
+### Verification
+
+After fixing, re-run the audit:
+```bash
+python scripts/run_audit.py --dry-run
+# or with GitHub issue creation:
+python scripts/run_audit.py --create-issues
+```
+
+Issues that are resolved will be closed automatically.
 
 ## Configuration
 
