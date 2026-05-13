@@ -1,0 +1,36 @@
+# Azure RBAC Risk Classification Rules
+# Used by rbac_classifier.py to determine risk levels
+
+# Roles that are considered CRITICAL (unrestricted access)
+critical_roles:
+  - Owner
+
+# Roles that are considered HIGH risk (broad modification access)
+high_roles:
+  - Contributor
+  - Admin
+  - Administrator
+
+# Roles that are considered MEDIUM risk
+medium_roles: []
+
+# Principal types that increase risk
+high_risk_principals:
+  - ServicePrincipal
+  - ManagedIdentity
+
+# Scope risk multiplier (deeper scopes are safer)
+scope_risk_multiplier:
+  "/": 2.0  # Tenant-level is most dangerous
+  "/providers/Microsoft.Management/managementGroups/": 1.8  # Management group level
+  # /subscriptions/* is 1.0 (baseline)
+  # /subscriptions/*/resourceGroups/* is 0.8
+  # /subscriptions/*/resourceGroups/*/providers/* is 0.5
+
+# Principals to whitelist (intentionally high-privilege, documented exception)
+whitelist:
+  # Example:
+  # - principal_id: "12345678-1234-1234-1234-123456789012"
+  #   role: "Owner"
+  #   scope: "/subscriptions/abcdef12-1234-1234-1234-123456789012"
+  #   reason: "Deployment service principal, required for infrastructure automation"
