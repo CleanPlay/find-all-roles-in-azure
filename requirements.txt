@@ -1,0 +1,19 @@
+# Azure SDK
+azure-identity==1.16.0
+azure-mgmt-subscription==3.1.1
+azure-mgmt-authorization==3.0.0
+azure-mgmt-resource==23.1.0
+msgraph-core==0.2.2
+
+# GitHub
+PyGithub==2.1.1
+requests==2.32.3
+
+# Utilities
+python-dotenv==1.0.0
+pydantic==2.7.4
+pyyaml==6.0.1
+click==8.1.7
+
+# Logging & observability
+python-json-logger==2.0.7
