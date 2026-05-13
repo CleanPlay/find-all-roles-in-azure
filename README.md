@@ -98,7 +98,7 @@ This project continuously audits Azure RBAC to find users and service accounts w
 ## Status
 
 - [x] Project structure & plan
-- [ ] Phase 1: Service principal setup
+- [x] Phase 1: Service principal setup
 - [ ] Phase 2: Python audit implementation
 - [ ] Phase 3: GitHub integration
 - [ ] Phase 4: Testing & dry-run
